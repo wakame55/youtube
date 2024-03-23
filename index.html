@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="jp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>yutube hub</title>
+    <style>
+        h3 {
+            margin: 0;
+            /* h3要素のデフォルトのマージンをリセット */
+            /* font-size: 16px; */
+            /* h3要素のフォントサイズを調整（必要に応じて） */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2b2e30;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 50px;
+        }
+
+        .box {
+            width: 1460px;
+            height: 760px;
+            /* background-color: #ccc; */
+            /* border: 2px solid #333; */
+            padding: 20px;
+            margin: 20px;
+            border-color: #666;
+            text-align: center;
+
+            /* サイドバーの幅を考慮して左マージンを調整 */
+            margin-left: calc(250px + 10px);
+            /* ボックスの幅をサイドバー分加算する */
+        }
+
+        .header-block {
+            background: #2d313a;
+            padding: 0 16px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .search-box {
+            width: 416px;
+            height: 20px;
+            padding: 8px 16px;
+            color: #fff;
+            background: #3c4144;
+            border: none;
+            border-radius: 4px;
+            margin: 0;
+        }
+
+        .search-box-input-wrap {
+            position: relative;
+            width: 100%;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            color: #fff;
+        }
+
+        .search-box-input-wrap input {
+            background: none;
+            font-size: 16px;
+            width: 100%;
+            height: 20px;
+            padding: 0 30px;
+            border: none;
+            color: inherit;
+            outline: none;
+        }
+
+        .search-box-input-icon {
+            margin-right: 10px;
+        }
+
+        .side-block {
+            width: 250px;
+            background-color: #3a3f49;
+            color: #fff;
+            padding-top: 2px;
+            /*サイドバーの上部に50ピクセルの余白*/
+            position: fixed;
+            top: 50px;
+            bottom: 0;
+            left: 0;
+            overflow-y: auto;
+
+            /* スクロールバーを非表示にする */
+            overflow: hidden;
+        }
+
+        .toplevel-items {
+            list-style: none;
+            padding: 0;
+        }
+
+        .toplevel-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 5px;
+            background-color: #444
+        }
+
+        .toplevel-item:hover {
+            background-color: #6a6a6a;
+        }
+
+        .toplevel-item-active {
+            background-color: #444;
+            border: 2px solid #333;
+            border-radius: 6px;
+            width: 206px;
+            height: 30px;
+
+        }
+
+        .toplevel-item .item-content {
+            display: flex;
+            /* アイテムの内容を横並びに配置する */
+            align-items: center;
+            /* 内容を垂直方向に中央揃えにする */
+        }
+
+        .toplevel-item .item-content img {
+            margin-right: 10px;
+            /* テキストと画像の間に10pxのマージンを追加 */
+            max-width: 30px;
+            /* 画像の幅を制限する（必要に応じて調整） */
+            max-height: 30px;
+            /* 画像の高さを制限する（必要に応じて調整） */
+        }
+
+        .space {
+            padding-top: 10px;
+        }
+
+        .main-display-block {
+            list-style: none;
+            padding: 0;
+        }
+
+        .main-display {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* margin-left: calc(250px); */
+        }
+
+        .main-display-left {
+            position: absolute;
+            top: 160px;
+            left: 1520px;
+            color: rgb(204, 204, 204);
+            font-size: 18px;
+
+        }
+
+        .main-display-left-space {
+            padding-top: 10px;
+        }
+
+        .main-display-left-sub {
+            position: absolute;
+            top: 239px;
+            left: 1607px;
+        }
+
+        .main-display-left-line {
+            width: 2px;
+            /* 縦線の幅を設定 */
+            height: 49px;
+            /* 縦線の高さを設定 */
+            background-color: #555555;
+            /* 縦線の色を設定 */
+        }
+
+
+        .main-display-center {
+            position: absolute;
+            top: 400px;
+        }
+
+        .main-display-center-text {
+            position: absolute;
+            top: 100px;
+            left: 595px;
+        }
+
+        h2 {
+            font-size: 32px;
+            text-align: center;
+            line-height: 24px;
+        }
+
+
+        .main-display-right {
+            position: absolute;
+            top: 140px;
+            left: 300px;
+            ;
+        }
+
+        h4 {
+            color: #ccc;
+            font-size: 32px;
+            text-align: center;
+        }
+
+        .main-display-right-box {
+            background-color: #444;
+            border: 2px solid #333;
+            border-radius: 6px;
+            width: 300px;
+            height: 400px;
+            position: relative;
+            bottom: 30px;
+        }
+
+        h5 {
+            color: #ccc;
+            font-size: 16px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="header-block">
+        <div class="search-box">
+            <div class="search-box-input-wrap">
+                <div class="search-box-input-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
+                        style="width:24px;height:24px;opacity:1" viewBox="0 0 512 512">
+                        <path
+                            d="M495.272 423.558s-68.542-59.952-84.937-76.328c-24.063-23.938-33.69-35.466-25.195-54.931 37.155-75.78 24.303-169.854-38.72-232.858-79.235-79.254-207.739-79.254-286.984 0-79.245 79.264-79.245 207.729 0 287.003 62.985 62.985 157.088 75.837 232.839 38.691 19.466-8.485 31.022 1.142 54.951 25.215 16.384 16.385 76.308 84.937 76.308 84.937 31.089 31.071 55.009 11.95 69.368-2.39 14.33-14.35 33.46-38.259 2.37-69.339zM286.017 286.012c-45.9 45.871-120.288 45.871-166.169 0-45.88-45.871-45.88-120.278 0-166.149 45.881-45.871 120.269-45.871 166.169 0 45.881 45.871 45.881 120.278 0 166.149z"
+                            style="fill:#ffffff" />
+                    </svg>
+                </div>
+                <input id="search-box-input" type="text" role="search" placeholder="すべてのコンテンツを検索" autocomplete="off"
+                    value="">
+            </div>
+        </div>
+    </div>
+
+    <aside class="side-block">
+        <ul class="toplevel-items">
+            <li class="toplevel-item toplevel-item-active">
+                <div class="item-content">
+                    <img src="ホーム.png" alt="">
+                    <h3>ホーム</h3>
+                    <a href="ホーム.html">
+
+                    </a>
+                </div>
+            </li>
+            <div class="space">
+
+                <li class="toplevel-item toplevel-item-active">
+
+                    <div class="item-content">
+                        <img src="お知らせ.png" alt="">
+                        <h3>お知らせ</h3>
+                        <a href="Access Denied.html">
+
+                        </a>
+                    </div>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="スケジュール.png" alt="">
+                        <h3>スケジュール</h3>
+                        <a href="Access Denied.html">
+                            
+                        </a>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="収録.png" alt="">
+                        <h3>収録</h3>
+                        <a href="Access Denied.html">
+                            
+                        </a>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="素材.png" alt="">
+                        <h3>素材</h3>
+                        <a href="Access Denied.html">
+                            
+                        </a>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="リンク一覧.png" alt="">
+                        <h3>リンク一覧</h3>
+                        <a href="Access Denied.html">
+                            
+                        </a>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="メール.png" alt="">
+                        <h3>メール</h3>
+                        <a href="Access Denied.html">
+                            
+                        </a>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="コピペ.png" alt="">
+                        <h3>コピペ</h3>
+                        <a href="Access Denied.html">
+                            
+                        </a>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="責任・役割.png" alt="">
+                        <h3>責任・役割</h3>
+                        <a href="Access Denied.html">
+                            
+                        </a>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="企画案.png" alt="">
+                        <h3>企画案</h3>
+                        <a href="Access Denied.html">
+                            
+                        </a>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="編集済み.png" alt="">
+                        <h3>編集済み</h3>
+                        <a href="Access Denied.html">
+                            
+                        </a>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="分析・改善.png" alt="">
+                        <h3>分析・改善</h3>
+                        <a href="Access Denied.html">
+                            
+                        </a>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="ツール.png" alt="">
+                        <h3>独自ツール</h3>
+                        <a href="Access Denied.html">
+                            
+                        </a>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="その他.png" alt="">
+                        <h3>その他</h3>
+                        <a href="Access Denied.html">
+                            
+                        </a>
+                </li>
+        </ul>
+    </aside>
+
+    <div class="container">
+        <!-- <div class="box"></div> -->
+        <div class="box">
+            <div class="main-display">
+
+                <img src="ホームヘッダー3.png" alt="" style="width: 800px; height: auto; border-radius: 6px;">
+                <div style="position: absolute; top: 160px; left: 300px + 80%;  color: white; font-size: 18px;">
+                    <h1>
+                        ようこそ！
+                    </h1>
+                </div>
+
+            </div>
+            <div>
+                <div class="main-display-left">
+                    <h1>
+                        今日の予定
+                    </h1>
+                    <ul class="toplevel-items">
+                        <li class="toplevel-item toplevel-item-active">
+                            <div class="item-content">
+                                <!-- <img src="ホーム.png" alt=""> -->
+                                <h3>
+                                    08:00
+                                </h3>
+                                <h3 style="position:absolute; left: 143px;">
+                                    配信
+                                </h3>
+                            </div>
+                        </li>
+                        <li class="toplevel-item toplevel-item-active">
+                            <div class="item-content">
+                                <!-- <img src="ホーム.png" alt=""> -->
+                                <h3>
+                                    10:00
+                                </h3>
+                                <h3 style="position:absolute; left: 143px;">
+                                    撮影
+                                </h3>
+                            </div>
+                        </li>
+                        <li class="toplevel-item toplevel-item-active">
+                            <div class="item-content">
+                                <!-- <img src="ホーム.png" alt=""> -->
+                                <h3>
+                                    13:00
+                                </h3>
+                                <h3 style="position:absolute; left: 143px;">
+                                    撮影2
+                                </h3>
+                            </div>
+                        </li>
+                        <li class="toplevel-item toplevel-item-active">
+                            <div class="item-content">
+                                <!-- <img src="ホーム.png" alt=""> -->
+                                <h3>
+                                    16:00
+                                </h3>
+                                <h3 style="position:absolute; left: 143px;">
+                                    配信2
+                                </h3>
+                            </div>
+                        </li>
+                        <li class="toplevel-item toplevel-item-active">
+                            <div class="item-content">
+                                <!-- <img src="ホーム.png" alt=""> -->
+                                <h3>
+                                    22:00
+                                </h3>
+                                <h3 style="position:absolute; left: 123px;">
+                                    配信終了
+                                </h3>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="main-display-left-sub">
+                    <ul class="toplevel-items">
+                        <li>
+                            <div class="main-display-left-space">
+                                <div class="main-display-left-line">
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="main-display-left-space">
+                                <div class="main-display-left-line">
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="main-display-left-space">
+                                <div class="main-display-left-line">
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="main-display-left-space">
+                                <div class="main-display-left-line">
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="main-display-left-space">
+                                <div class="main-display-left-line">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-display-center">
+        <img src="吹き出し.png" alt="" width="400" height=auto style="padding-bottom: 100px; padding-left: 510px;">
+        <img src="ずんだもん_ビックリ.png" alt="" width="300" height=auto>
+        <div class="main-display-center-text">
+            <h2>
+                登録者数
+            </h2>
+            <h2 style="font-size: 64px; text-align: center; ">
+                16.8万人
+            </h2>
+        </div>
+    </div>
+
+    <div class="main-display-right">
+        <h4 style="padding-right: 20px;">
+            要確認
+        </h4>
+        <div class="main-display-right-box">
+            <h5 style="padding-top: 30px;">
+                確認すべき情報はありません
+            </h5>
+        </div>
+
+    </div>
+</body>
+
+</html>
