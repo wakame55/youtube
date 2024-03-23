@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="jp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>yutube hub</title>
+    <style>
+        h3 {
+            margin: 0;
+            /* h3要素のデフォルトのマージンをリセット */
+            /* font-size: 16px; */
+            /* h3要素のフォントサイズを調整（必要に応じて） */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2b2e30;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 50px;
+        }
+
+        .box {
+            width: 1460px;
+            height: 760px;
+            background-color: #ccc;
+            border: 2px solid #333;
+            padding: 20px;
+            margin: 20px;
+            border-color: #666;
+            text-align: center;
+
+            /* サイドバーの幅を考慮して左マージンを調整 */
+            margin-left: calc(250px + 10px);
+            /* ボックスの幅をサイドバー分加算する */
+        }
+
+        .header-block {
+            background: #2d313a;
+            padding: 0 16px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .search-box {
+            width: 416px;
+            height: 20px;
+            padding: 8px 16px;
+            color: #fff;
+            background: #3c4144;
+            border: none;
+            border-radius: 4px;
+            margin: 0;
+        }
+
+        .search-box-input-wrap {
+            position: relative;
+            width: 100%;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            color: #fff;
+        }
+
+        .search-box-input-wrap input {
+            background: none;
+            font-size: 16px;
+            width: 100%;
+            height: 20px;
+            padding: 0 30px;
+            border: none;
+            color: inherit;
+            outline: none;
+        }
+
+        .search-box-input-icon {
+            margin-right: 10px;
+        }
+
+        .side-block {
+            width: 250px;
+            background-color: #3a3f49;
+            color: #fff;
+            padding-top: 2px;
+            /*サイドバーの上部に50ピクセルの余白*/
+            position: fixed;
+            top: 50px;
+            bottom: 0;
+            left: 0;
+            overflow-y: auto;
+
+            /* スクロールバーを非表示にする */
+            overflow: hidden;
+        }
+
+        .toplevel-items {
+            list-style: none;
+            padding: 0;
+        }
+
+        .toplevel-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 5px;
+            background-color: #444
+        }
+
+        .toplevel-item:hover {
+            background-color: #6a6a6a;
+        }
+
+        .toplevel-item-active {
+            background-color: #444;
+            border: 2px solid #333;
+            border-radius: 6px;
+            width: 206px;
+            height: 30px;
+
+        }
+
+        .toplevel-item .item-content {
+            display: flex;
+            /* アイテムの内容を横並びに配置する */
+            align-items: center;
+            /* 内容を垂直方向に中央揃えにする */
+        }
+
+        .toplevel-item .item-content img {
+            margin-right: 10px;
+            /* テキストと画像の間に10pxのマージンを追加 */
+            max-width: 30px;
+            /* 画像の幅を制限する（必要に応じて調整） */
+            max-height: 30px;
+            /* 画像の高さを制限する（必要に応じて調整） */
+        }
+
+        .space {
+            padding-top: 10px;
+        }
+
+        .main-display-block {
+            list-style: none;
+            padding: 0;
+        }
+
+        .main-display-list h3 {
+            background-color: #636363;
+            border: 2px solid #414141;
+            border-radius: 6px;
+            width: 1000px;
+            height: 40px;
+
+            display: flex;
+            /* アイテムの内容を横並びに配置する */
+            align-items: center;
+            /* 内容を垂直方向に中央揃えにする */
+
+            color: #fff;
+        }
+
+        .main-display-list:hover h3 {
+            background-color: #919191;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header-block">
+        <div class="search-box">
+            <div class="search-box-input-wrap">
+                <div class="search-box-input-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
+                        style="width:24px;height:24px;opacity:1" viewBox="0 0 512 512">
+                        <path
+                            d="M495.272 423.558s-68.542-59.952-84.937-76.328c-24.063-23.938-33.69-35.466-25.195-54.931 37.155-75.78 24.303-169.854-38.72-232.858-79.235-79.254-207.739-79.254-286.984 0-79.245 79.264-79.245 207.729 0 287.003 62.985 62.985 157.088 75.837 232.839 38.691 19.466-8.485 31.022 1.142 54.951 25.215 16.384 16.385 76.308 84.937 76.308 84.937 31.089 31.071 55.009 11.95 69.368-2.39 14.33-14.35 33.46-38.259 2.37-69.339zM286.017 286.012c-45.9 45.871-120.288 45.871-166.169 0-45.88-45.871-45.88-120.278 0-166.149 45.881-45.871 120.269-45.871 166.169 0 45.881 45.871 45.881 120.278 0 166.149z"
+                            style="fill:#ffffff" />
+                    </svg>
+                </div>
+                <input id="search-box-input" type="text" role="search" placeholder="すべてのコンテンツを検索" autocomplete="off"
+                    value="">
+            </div>
+        </div>
+    </div>
+
+    <aside class="side-block">
+        <ul class="toplevel-items">
+            <li class="toplevel-item toplevel-item-active">
+                <div class="item-content">
+                    <img src="ホーム.png" alt="">
+                    <h3>ホーム</h3>
+                    <a href="ホーム.html">
+
+                    </a>
+            </li>
+            <div class="space">
+
+                <li class="toplevel-item toplevel-item-active">
+
+                    <div class="item-content">
+                        <img src="お知らせ.png" alt="">
+                        <h3>お知らせ</h3>
+                    </div>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="スケジュール.png" alt="">
+                        <h3>スケジュール</h3>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="収録.png" alt="">
+                        <h3>収録</h3>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="素材.png" alt="">
+                        <h3>素材</h3>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="リンク一覧.png" alt="">
+                        <h3>リンク一覧</h3>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="メール.png" alt="">
+                        <h3>メール</h3>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="コピペ.png" alt="">
+                        <h3>コピペ</h3>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="責任・役割.png" alt="">
+                        <h3>責任・役割</h3>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="企画案.png" alt="">
+                        <h3>企画案</h3>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="編集済み.png" alt="">
+                        <h3>編集済み</h3>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="分析・改善.png" alt="">
+                        <h3>分析・改善</h3>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="ツール.png" alt="">
+                        <h3>独自ツール</h3>
+                </li>
+                <li class="toplevel-item toplevel-item-active">
+                    <div class="item-content">
+                        <img src="その他.png" alt="">
+                        <h3>その他</h3>
+                </li>
+        </ul>
+    </aside>
+
+    <div class="container">
+        <!-- <div class="box"></div> -->
+        <div class="box">
+            <ul class="main-display-block">
+                <li class="main-display-list">
+                    <h3>お知らせ
+                    </h3>
+                <li class="main-display-list">
+                    <h3>お知らせ
+                    </h3>
+                <li class="main-display-list">
+                    <h3>お知らせ
+                    </h3>
+                <li class="main-display-list">
+                    <h3>お知らせ
+                    </h3>
+                <li class="main-display-list">
+                    <h3>お知らせ
+                    </h3>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>
